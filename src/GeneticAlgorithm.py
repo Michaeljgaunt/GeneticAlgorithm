@@ -26,7 +26,6 @@ def generate_chromosomes(upper_bound, chrom_num):
             #If the integer is >= 5, the bit in question is assigned a 1.                
             else:
                 chrom_array[i][j] = 1
-
     #The randomised chromosomes are returned in a list.
     return list(chrom_array)
 
@@ -93,45 +92,33 @@ def evaluate_probability(fitness_array, sum):
     #Returning the probability array
     return list(prob_array)
 
-#Defining a function to match chromosomes and perform chromosome crossover.
-def crossover(chrom_array, prob_array):
-    #Copying the chromosomes and probabilities into a new array.
-    copied_chrom_array = chrom_array
-    copied_prob_array = prob_array
-    #Saving the number of chromosomes.
-    num_chroms = len(copied_chrom_array)
-    #Defining an array to hold the parents undergoing crossover.
-    crossover_array = [0, 0]
-    #Defining an array to hold the child chromosomes
-    child_chrom_array = []
+#Defining a function to rank the chromosomes based on the roulette method using their probabilities.
+def roulette_rank(chrom_array, prob_array):
+    #Instantiating the total value and current index.
+    total = 0
+    curr_ind = 0
+    #Creating a new array to hold the chosen chromosomes.
+    parent_array = []
+    #Iterating over the number of chromosomes.
+    for i in xrange(0, len(chrom_array)):
+        #Generating a random float between 0 and 1.
+        random_num = random.random()
+        #Adding the current iterating probability to the total.
+        total += prob_array[i]
+        #Saving the current index.
+        curr_ind = 0
+        #If the random number is greater than the running total:
+        if (random_num >= total):
+            #Append the chosen chromosome in the parent array.
+            parent_array.append(chrom_array[i])
+            #Reset the total to 0.
+            total = 0
+            continue
+    return parent_array
 
-    #Iterating over chromosome pairs.
-    for k in xrange(0, (num_chroms / 2)):
-        #Iterating twice
-        for i in xrange(0 ,2):
-            #Finding the index of the maximum probability.
-            max_index = copied_prob_array.index(max(copied_prob_array))
-            #Using that to index into the chromosome array and copy it into the crossover array.
-            crossover_array[i] = copied_chrom_array[max_index]
-            #Delete the chromosome and corresponding probability from the original chromosome array and the probability array
-            del copied_chrom_array[max_index]
-            del copied_prob_array[max_index]
-
-        #Generating a random cut point on the chromosomes.
-        cut_point = random.randint(1, 4)
-        #Iterating up to the cut point.
-        for i in xrange(0, cut_point):
-            #Saving the bit value from each chromosome to a temporary variable.
-            temp_bit_1 = crossover_array[0][i]
-            temp_bit_2 = crossover_array[1][i]
-            #Swapping the chromosome's bit variables (i..e crossover)
-            crossover_array[0][i] = temp_bit_2
-            crossover_array[1][i] = temp_bit_1
-        #Appending the new children chromosomes in the child array.
-        child_chrom_array.append(crossover_array[0])
-        child_chrom_array.append(crossover_array[1])
-    #Returning the child array.
-    return child_chrom_array
+#Defining a function to perform chromosome crossover.
+def crossover(chrom_array):
+    return chrom_array
 
 #Defining a function to randomly mutate bit values in a chromosome according to a given mutation rate.
 def mutate(mutation_rate, c_array):

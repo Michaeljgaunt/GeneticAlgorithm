@@ -36,9 +36,11 @@ if __name__ == "__main__":
     
     #Iterating up to the number of iterations entered on the command line.
     for i in xrange(0, (args.iterations-1)):
-        #Calling a function to perform crossover on the chromosomes.
         print "\nCrossing over chromosomes to produce generation " + str(i + 2) + "..."
-        child_chroms = GeneticAlgorithm.crossover(chromosomes, probabilities) 
+        #Calling a function to roulette rank the chromosomes.
+        roulette_ranked_chromosomes = GeneticAlgorithm.roulette_rank(chromosomes, probabilities)
+        #Calling a function to perform crossover on the chromosomes.
+        child_chroms = GeneticAlgorithm.crossover(roulette_ranked_chromosomes) 
         #Mutating the new children chromosomes.
         print "Mutating generation " + str(i + 2) + "..."
         mutated_child_chroms = GeneticAlgorithm.mutate(args.mutrate, child_chroms)
