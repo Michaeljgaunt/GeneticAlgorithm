@@ -5,7 +5,8 @@ import random
 
 #Defining the objective function.
 def objective_function(x):
-    result = x * x
+    #result = (x * (math.sin(x) * (math.pi * 10)))
+    result = x * x * x
     return result
 
 #Defining a function to randomly generate chromosomes.
@@ -55,11 +56,11 @@ def convert_bitstring(chrom_array, lower_bound, upper_bound):
     #Returning the bit string as decimals in an array
     print "convert_bitstring: " + str(list(bs_array))
     return list(bs_array)
-  
+
 #Defining a function to evaluate the fitness of a given variable.        
-def evaluate_fitness(decimal_array):
+def evaluate_fitness(value_array):
     #Saving the length of the value_array.
-    value_array_size = len(decimal_array)
+    value_array_size = len(value_array)
     #Making an array to hold fitness values
     fitness_array = numpy.zeros(value_array_size)
     #Instantiating the sum as 0
@@ -67,7 +68,7 @@ def evaluate_fitness(decimal_array):
     #Iterating over the length of the value array.
     for i in xrange(0, value_array_size):
         #Saving the current element as x
-        x = decimal_array[i]
+        x = value_array[i]
         #Passing x into the objective function to evaluate it's fitness.
         fitness = objective_function(x)
         #Saving the fitness value in an array.
@@ -76,7 +77,8 @@ def evaluate_fitness(decimal_array):
         sum += fitness
     #Returning the fitness array and the sum.
     print "evaluate fitness: " + str(list(fitness_array))
-    return {"fitnesses":fitness_array, "sum":sum}
+    print "fitness sum: " + str(sum)
+    return {"fitnesses":list(fitness_array), "sum":sum}
 
 #Defining a funtion to evaluate the probability of a given variable.
 def evaluate_probability(fitness_array, sum):
@@ -98,62 +100,62 @@ def evaluate_probability(fitness_array, sum):
 
 #Defining a function to rank the chromosomes based on the roulette method using their probabilities.
 def roulette_rank(chrom_array, prob_array):
-    #Instantiating the total value and current index.
+    #Instantiating the total value.
     total = 0
-    curr_ind = 0
     #Creating a new array to hold the chosen chromosomes.
     parent_array = []
+    #Generating a random float between 0 and 1.
+    random_num = random.random()
     #Iterating over the number of chromosomes.
     for i in xrange(0, len(chrom_array)):
-        #Generating a random float between 0 and 1.
-        random_num = random.random()
-        #Adding the current iterating probability to the total.
-        total += prob_array[i]
-        #Saving the current index.
-        curr_ind = 0
-        #If the random number is greater than the running total:
-        if (random_num >= total):
-            #Append the chosen chromosome in the parent array.
-            parent_array.append(chrom_array[i])
-            #Reset the total to 0.
-            total = 0
-            continue
+        print "random number is " + str(random_num)
+        #Iterating over the number of chromosomes.
+        for i in xrange(0, len(chrom_array)):
+            #Adding the current iterating probability to the total.
+            total += prob_array[i]
+            #If the total is greater than the random number:
+            if (total >= random_num):
+                #Append the chosen chromosome in the parent array.
+                parent_array.append(chrom_array[i])
+                #Reset the total to 0.
+                total = 0
+                #Generating a new random number
+                random_num = random.random()
+                #Breaking into the outer for loop.
+                break
     print "roulette_rank: " + str(list(parent_array))
     return parent_array
 
-#Defining a function to perform chromosome crossover.
-#def crossover(chrom_array):
+def crossover(chrom_array):
     #Saving number of the chromosomes.
- #   chrom_num = len(chrom_array)
+    chrom_num = len(chrom_array)
     #Saving length of chromosomes.
-  #  chrom_len = len(chrom_array[0])
+    chrom_len = len(chrom_array[0])
     #making new array to hold child chromosomes.
-   # child_array = []
+    child_array = []
     #Iterating over the number of chromosome pairs.
-    #for i in xrange(1, ((chrom_num / 2) + 1)):
-     #   chrom_a = chrom_array[(2 * i) - 2]
-      #  chrom_b = chrom_array[(2 * i) - 1]
-       # print chrom_a
-        #print chrom_b
-
-        #cut_point = random.randint(1, (chrom_len - 1))
-
-        #child_a = chrom_a[0:cut_point] + chrom_b[cut_point:]
-        #child_b = chrom_b[0:cut_point] + chrom_a[cut_point:]
-
-        #child_array.append(child_a)
-        #child_array.append(child_b)
-
-    #return child_array
-
-
+    for i in xrange(1, ((chrom_num / 2) + 1)):
+        #Getting the chromosomes in the pair.
+        chrom_a = chrom_array[(2 * i) - 2]
+        chrom_b = chrom_array[(2 * i) - 1]
+        #Randomly generating a cut point.
+        cut_point = random.randint(1, (chrom_len - 1))
+        #Cutting both chromosomes and combining the segments (one from each parent). Saving as a new chromosome.
+        child_a = list(chrom_a[0:cut_point]) + list(chrom_b[cut_point:])
+        child_b = list(chrom_b[0:cut_point]) + list(chrom_a[cut_point:])
+        #Appending the two child chromosomes in the child array.
+        child_array.append(child_a)
+        child_array.append(child_b)
+    print "crossover: " + str(child_array)
+    #Returning the child chromosomes.
+    return child_array
 
 #Defining a function to randomly mutate bit values in a chromosome according to a given mutation rate.
-def mutate(mutation_rate, c_array):
+def mutate(mutation_rate, chrom_array):
     #Saving the number of chromosomes.
-    num_chroms = len(c_array)
+    num_chroms = len(chrom_array)
     #Saving the length of chromosomes.
-    chrom_len = len(c_array[0])
+    chrom_len = len(chrom_array[0])
     #Iterating over the number of chromosomes.
     for i in xrange(0, num_chroms):
         #Iterating over each chromosome bit
@@ -163,8 +165,45 @@ def mutate(mutation_rate, c_array):
             #If that number is 1
             if (mutation == 20):
                 #The bit at the current position is flipped.
-                c_array[i][j] = (1 - c_array[i][j])
-    print "mutate: " + str(list(c_array))
-    return list(c_array)
+                chrom_array[i][j] = (1 - chrom_array[i][j])
+    print "mutate: " + str(list(chrom_array))
+    return list(chrom_array)
+
+#Main method.
+if __name__ == "__main__":
     
+    #Randomly generating chromosomes.
+    chromosomes = generate_chromosomes(426, 10)
     
+    #Iterating the algorithm a set number of times.
+    for i in xrange(0, 10):
+
+        #Calculating the integer values of the bit string chromosomes. Passing in the range to squeeze the values into.
+        chromosome_values = convert_bitstring(chromosomes, 0, 426)
+
+        #Evaluating the chromosomes' fitness and summing their values.
+        chromosome_evaluation = evaluate_fitness(chromosome_values)
+        chromosome_fitnesses = chromosome_evaluation.get("fitnesses")
+        chromosome_fitness_sum = chromosome_evaluation.get("sum")
+
+        #Finding the index of the maximal fitness value and using it to find the variable value that caused the fitness value.
+        best_index = chromosome_fitnesses.index(max(chromosome_fitnesses))
+        best_value = chromosome_values[best_index]
+
+        #Calculating the probabilities of the chromosomes.
+        chromosome_probabilities = evaluate_probability(chromosome_fitnesses, chromosome_fitness_sum)
+
+        #Roulette ranking the chromosomes according to their probabilities.
+        potential_parents = roulette_rank(chromosomes, chromosome_probabilities)
+
+        #Performing crossover with the roulette ranked parents.
+        children = crossover(potential_parents)
+        
+        #Mutating the children by a given mutation rate.
+        mutated_children = mutate(5, children)
+        
+        #Setting the mutated children as the original chromosomes for the next loop iteration.
+        chromosomes = mutated_children
+        
+        #Printing the value found that maximises the objecive function.
+        print "Iteration " + str(i) + ". Best value found is " + str(best_value) + ".\n"
