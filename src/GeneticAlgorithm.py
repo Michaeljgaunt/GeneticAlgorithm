@@ -27,6 +27,7 @@ def generate_chromosomes(upper_bound, chrom_num):
             else:
                 chrom_array[i][j] = 1
     #The randomised chromosomes are returned in a list.
+    print "generate_chromosomes: " + str(list(chrom_array))
     return list(chrom_array)
 
 #Defining a function to convert a bit string into a decimal value.
@@ -51,7 +52,8 @@ def convert_bitstring(chrom_array, lower_bound, upper_bound):
         squeezed_value = float(lower_bound) + ( ( float(upper_bound - lower_bound) / (float(2 ** chrom_len) - float(1)) ) * float(bs_value) )
         #Adding the squeezed value into the array
         bs_array[i] = squeezed_value
-    #Returning the bit string as decimals in an array.
+    #Returning the bit string as decimals in an array
+    print "convert_bitstring: " + str(list(bs_array))
     return list(bs_array)
   
 #Defining a function to evaluate the fitness of a given variable.        
@@ -73,6 +75,7 @@ def evaluate_fitness(decimal_array):
         #Adding it to the sum value.
         sum += fitness
     #Returning the fitness array and the sum.
+    print "evaluate fitness: " + str(list(fitness_array))
     return {"fitnesses":fitness_array, "sum":sum}
 
 #Defining a funtion to evaluate the probability of a given variable.
@@ -90,6 +93,7 @@ def evaluate_probability(fitness_array, sum):
         #Saving the probability in the array.
         prob_array[i] = probability
     #Returning the probability array
+    print "evaluate_probability: " + str(list(prob_array))
     return list(prob_array)
 
 #Defining a function to rank the chromosomes based on the roulette method using their probabilities.
@@ -114,11 +118,35 @@ def roulette_rank(chrom_array, prob_array):
             #Reset the total to 0.
             total = 0
             continue
+    print "roulette_rank: " + str(list(parent_array))
     return parent_array
 
 #Defining a function to perform chromosome crossover.
-def crossover(chrom_array):
-    return chrom_array
+#def crossover(chrom_array):
+    #Saving number of the chromosomes.
+ #   chrom_num = len(chrom_array)
+    #Saving length of chromosomes.
+  #  chrom_len = len(chrom_array[0])
+    #making new array to hold child chromosomes.
+   # child_array = []
+    #Iterating over the number of chromosome pairs.
+    #for i in xrange(1, ((chrom_num / 2) + 1)):
+     #   chrom_a = chrom_array[(2 * i) - 2]
+      #  chrom_b = chrom_array[(2 * i) - 1]
+       # print chrom_a
+        #print chrom_b
+
+        #cut_point = random.randint(1, (chrom_len - 1))
+
+        #child_a = chrom_a[0:cut_point] + chrom_b[cut_point:]
+        #child_b = chrom_b[0:cut_point] + chrom_a[cut_point:]
+
+        #child_array.append(child_a)
+        #child_array.append(child_b)
+
+    #return child_array
+
+
 
 #Defining a function to randomly mutate bit values in a chromosome according to a given mutation rate.
 def mutate(mutation_rate, c_array):
@@ -136,6 +164,7 @@ def mutate(mutation_rate, c_array):
             if (mutation == 20):
                 #The bit at the current position is flipped.
                 c_array[i][j] = (1 - c_array[i][j])
+    print "mutate: " + str(list(c_array))
     return list(c_array)
     
     

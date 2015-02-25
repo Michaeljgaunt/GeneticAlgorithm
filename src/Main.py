@@ -40,7 +40,7 @@ if __name__ == "__main__":
         #Calling a function to roulette rank the chromosomes.
         roulette_ranked_chromosomes = GeneticAlgorithm.roulette_rank(chromosomes, probabilities)
         #Calling a function to perform crossover on the chromosomes.
-        child_chroms = GeneticAlgorithm.crossover(roulette_ranked_chromosomes) 
+        child_chroms = roulette_ranked_chromosomes  #GeneticAlgorithm.crossover(roulette_ranked_chromosomes) 
         #Mutating the new children chromosomes.
         print "Mutating generation " + str(i + 2) + "..."
         mutated_child_chroms = GeneticAlgorithm.mutate(args.mutrate, child_chroms)
