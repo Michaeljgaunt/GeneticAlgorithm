@@ -24,37 +24,57 @@ python Main.py
 followed by any of the following commands:
 
 
+
 -l (integer)
+
 --lowerval (integer)
+
 
 Input an integer for the range's lower bound.
 
 
 -u (integer)
+
 --upperval (integer)
+
 
 Input an integer for the range's upper bound.
 
 
+
 -c (integer)
+
 --cnums (integer)
+
 
 Input an integer for the desired number of chromosomes.
 
 
+
 -i (integer)
+
 --iterations (integer)
+
 
 Input an integer for the desired number of iterations.
 
 
+
 -m (interger)
+
 --mutrate (integer)
+
 
 Input an integer between 1 and 100 for the desired mutation rate.
 
 
+
 -d
+
 --debug
 
+
 Enter debug mode.
+
+
+
