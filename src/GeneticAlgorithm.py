@@ -5,8 +5,8 @@ import random
 
 #Defining the objective function.
 def objective_function(x):
-    #result = (x * (math.sin(x) * (math.pi * 10)))
-    result = x * x * x
+    result = (x * (math.sin(x) * (math.pi * 10)))
+    #result = x * x * x
     return result
 
 #Defining a function to randomly generate chromosomes.
@@ -160,9 +160,14 @@ def mutate(mutation_rate, chrom_array):
     for i in xrange(0, num_chroms):
         #Iterating over each chromosome bit
         for j in xrange(0, chrom_len):
-            #Generates a random number based on the given mutation rate.
-            mutation = random.randint(0, (100 / mutation_rate))
-            #If that number is 1
+            #If mutation rate was entered as 0, the mutator is set as 0.
+            if(mutation_rate == 0):
+                mutation = 0
+            #If mutation rate is higher than 0:
+            else:
+                #Generates a random number based on the given mutation rate.
+                mutation = random.randint(0, (100 / mutation_rate))
+            #If the mutator equals 1
             if (mutation == 1):
                 #The bit at the current position is flipped.
                 chrom_array[i][j] = (1 - chrom_array[i][j])
@@ -170,7 +175,7 @@ def mutate(mutation_rate, chrom_array):
 
 #Defining a function to aid in debugging.
 def debug():
-    print "----------------------------------- DEBUG MODE ---------------------------------------"
+    print "\n----------------------------------- DEBUG MODE ---------------------------------------"
     print "| Generating 4 chromosomes of length 5.                                              |"                                     
     print "| Squeezing with a range of 2 - 60                                                   |"
     print "| Iterating 3 times.                                                                 |"
@@ -242,4 +247,4 @@ def debug():
         print str(chromosomes)
         print ""
         print ""
-    print "\n----- END DEBUG -----"
+    print "\n----- END DEBUG -----\n"
