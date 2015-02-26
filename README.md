@@ -1,43 +1,60 @@
 # GeneticAlgorithm
-Genetic Algorithm that evaluates the best variables to use in order to maximise an objective function
+Genetic Algorithm that evaluates the best variables to use in order to maximise an objective function.
+User can input integers for the required range of variables , desired number of iterations, desired number
+of chromosomes and desired mutation rate.
 
 
-Launch the program by navigating to the directory in a terminal window and typing:
+Launch the program with default values by navigating to the directory in a terminal window and typing:
 
-python Main.py (command line arguments)
+python Main.py
 
+The default values are as follows: 
+range 0 - 100
+1 iteration
+10 chromosomes
+5% mutation rate
 
-Required Command Line Arguments
--------------------------------
+Command Line Arguments
+-----------------------
 
--l (integer) or --lowerval (integer)
+Launch the program with user inputted values by navigating to the directory in a terminal window and typing:
 
-Allows input of the lower bound for generated variables to be squeezed into.
+python Main.py
 
-
--u (integer) or --upperval (integer)
-
-Allows input of the upper bound for generated variables to be squeezed into.
-
-
--c (integer) or --cnums (integer)
-
-Allows input of the desired number of chromosomes to be generated.
+followed by any of the following commands:
 
 
-Optional Command Line Arguments
--------------------------------
+-l (integer)
+--lowerval (integer)
 
--i (integer) or --iterations (integer)
-
-Allows input of the desired number of iterations for the algorithm. If this command is not used, the program defaults to 1 iteration.
+Input an integer for the range's lower bound.
 
 
--m (interger) or --mutrate (integer)
+-u (integer)
+--upperval (integer)
 
-Allows input of the desired mutation rate. If this command is not used, the program defaults to a 5% mutation rate.
+Input an integer for the range's upper bound.
 
 
--d or --debug
+-c (integer)
+--cnums (integer)
+
+Input an integer for the desired number of chromosomes.
+
+
+-i (integer)
+--iterations (integer)
+
+Input an integer for the desired number of iterations.
+
+
+-m (interger)
+--mutrate (integer)
+
+Input an integer between 1 and 100 for the desired mutation rate.
+
+
+-d
+--debug
 
 Enter debug mode.
