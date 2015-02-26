@@ -6,13 +6,13 @@ import GeneticAlgorithm
 if __name__ == "__main__":
     
     #Adding an ArgumentParser to set up command line commands.
-    parser = argparse.ArgumentParser(description='Genetic algorithm to evaluate the best variables to maximise an objective function')
+    parser = argparse.ArgumentParser(description="Genetic algorithm to evaluate the best variables to maximise an objective function", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     #Adding commands.
-    parser.add_argument("-i", "--iterations", help="Enter the command followed by an integer number to represent the number of desired iterations of the genetic algorithm. If this command isn't entered manually, the program runs 1 iteration by default.", default='1', type=int)
-    parser.add_argument("-l", "--lowerval", help="Enter the miniimum value for the variable.", default='0', type=int)
+    parser.add_argument("-i", "--iterations", help="Enter the command followed by an integer number to represent the number of desired iterations of the genetic algorithm.", default='5', type=int)
+    parser.add_argument("-l", "--lowerval", help="Enter the minimum value for the variable.", default='0', type=int)
     parser.add_argument("-u", "--upperval", help="Enter the maximum value for the variable.", default='100', type=int)
     parser.add_argument("-c", "--cnum", help="Enter a value for the desired number of chromosomes.",  default='10', type=int)
-    parser.add_argument("-m", "--mutrate", help="Enter a value for the desired mutation rate (integer from 1 - 100). If this command isn't entered manually, the program uses a mutation rate of 5%", default='5', type=int, choices=range(0, 100))
+    parser.add_argument("-m", "--mutrate", help="Enter a value for the desired mutation rate (integer from 1 - 100).", default='5', type=int, choices=range(1, 101), metavar="")
     parser.add_argument("-d", "--debug", help="Debug mode.", action='store_true')
 
     #Parsing the command line arguments.
