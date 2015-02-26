@@ -103,20 +103,28 @@ def roulette_rank(chrom_array, prob_array):
     random_num = random.random()
     #Iterating over the number of chromosomes.
     for i in xrange(0, len(chrom_array)):
-        #Iterating over the number of chromosomes.
-        for i in xrange(0, len(chrom_array)):
-            #Adding the current iterating probability to the total.
-            total += prob_array[i]
-            #If the total is greater than the random number:
-            if (total >= random_num):
-                #Append the chosen chromosome in the parent array.
-                parent_array.append(chrom_array[i])
-                #Reset the total to 0.
-                total = 0
-                #Generating a new random number
-                random_num = random.random()
-                #Breaking into the outer for loop.
-                break
+        #If the parent array is not empty:
+        if(parent_array):
+            #Iterating over the number of chromosomes.
+            for i in xrange(0, len(chrom_array)):
+                #Adding the current iterating probability to the total.
+                total += prob_array[i]
+                #If the total is greater than the random number:
+                if (total >= random_num):
+                    #Append the chosen chromosome in the parent array.
+                    parent_array.append(chrom_array[i])
+                    #Reset the total to 0.
+                    total = 0
+                    #Generating a new random number
+                    random_num = random.random()
+                    #Breaking into the outer for loop.
+                    break
+        #If the parent array is empty:
+        else:
+            #Finding the index of the best chromosome.
+            best_index = prob_array.index(max(prob_array))
+            #Appending the best chromosome in the parent array to ensure its survival.
+            parent_array.append(chrom_array[best_index])
     return parent_array
 
 def crossover(chrom_array):
@@ -160,3 +168,58 @@ def mutate(mutation_rate, chrom_array):
                 chrom_array[i][j] = (1 - chrom_array[i][j])
     return list(chrom_array)
 
+#Defining a function to aid in debugging.
+def debug():
+    print "----------------------------------- DEBUG MODE ---------------------------------------"
+    print "| Generating 4 chromosomes of length 5.                                              |"                                     
+    print "| Squeezing with a range of 2-60                                                     |"
+    print "| iterating 5 times.                                                                 |"
+    print "|                                                                                    |"
+    print "| Layout:                                                                            |"
+    print "| [Description of event] (corresponding function name): [values returned by function]|"
+    print "--------------------------------------------------------------------------------------\n"
+    
+    #Generating 4 chromosomes that hold a 5-bit bitstring.
+    chromosomes = generate_chromosomes(31, 4)
+    print "Original chromosomes (generate_chromosomes): " + str(chromosomes) 
+    
+    #Iterating the algorithm 5 times.
+    for i in xrange(0, 5):
+        print "\nBeginning iteration " + str(i + 1) + "."
+
+        #Calculating the integer values of the bit string chromosomes, squeezing in a range of 2-60.
+        chromosome_values = convert_bitstring(chromosomes, 2, 60)
+        print "Converting to integers (convert_bitstring): " + str(chromosome_values)
+        #Evaluating the chromosomes' fitness and summing their values.
+        chromosome_evaluation = evaluate_fitness(chromosome_values)
+        chromosome_fitnesses = chromosome_evaluation.get("fitnesses")
+        print "Evaluating fitnesses (evaluate_fitness): " + str(chromosome_fitnesses)
+        chromosome_fitness_sum = chromosome_evaluation.get("sum")
+        print "Evaluating sigma-fitness (evaluate_fitness): " + str(chromosome_fitness_sum)
+
+        #Finding the index of the maximal fitness value and using it to find the variable value that caused the fitness value.
+        best_index = chromosome_fitnesses.index(max(chromosome_fitnesses))
+        print "Finding index of best fitness value: " + str(best_index)
+        best_value = chromosome_values[best_index]
+        print "Finding the best integer value generated using the index: " + str(best_value)
+
+        #Calculating the probabilities of the chromosomes.
+        chromosome_probabilities = evaluate_probability(chromosome_fitnesses, chromosome_fitness_sum)
+        print "Calculating the probabilities of the chromosomes (evaluate_probabilities): " +str(chromosome_probabilities)
+
+        #Roulette ranking the chromosomes according to their probabilities.
+        potential_parents = roulette_rank(chromosomes, chromosome_probabilities)
+        print "Ranking potential parents using the roulette system (roulette_rank): " + str(potential_parents)
+
+        #Performing crossover with the roulette ranked parents.
+        children = crossover(potential_parents)
+        print "Performing crossover (crossover): " + str(children)
+        
+        #Mutating the children with a 5% mutation rate.
+        mutated_children = mutate(5, children)
+        print "Mutating (mutate): " + str(mutated_children)
+        
+        #Setting the mutated children as the original chromosomes for the next loop iteration.
+        chromosomes = mutated_children
+        print "Setting the children as the new 'original' chromosomes for next iteration: " + str(chromosomes)
+    print "\n----- END DEBUG -----"
