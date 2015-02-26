@@ -1,11 +1,11 @@
 
 import argparse
 import sys
-import GeneticAlgorithm
-
+import GeneticAlgorithm    
+    
 #Main method.
 if __name__ == "__main__":
-    
+
     #Adding an ArgumentParser to set up command line commands.
     parser = argparse.ArgumentParser(description="Genetic algorithm to evaluate the best variables to maximise an objective function", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     #Adding commands.
@@ -18,13 +18,13 @@ if __name__ == "__main__":
 
     #Parsing the command line arguments.
     args = parser.parse_args()
-    
+
     #Checking to see if the command line input for number of chromosomes is an even number.
     if(args.cnum % 2 != 0):
         #If it's not, print a statement to the console and exit the program.
         print "The number of desired chromosomes must be even for crossover to work."
         sys.exit(1)
-    
+
     if(args.debug):
         GeneticAlgorithm.Debug.debug(args)
     else:
@@ -51,6 +51,17 @@ if __name__ == "__main__":
             #Finding the index of the maximal fitness value and using it to find the variable value that caused the fitness value.
             best_index = chromosome_fitnesses.index(max(chromosome_fitnesses))
             best_value = chromosome_values[best_index]
+            #If it is the first iteration:
+            if(i == 0):
+                #The global best value is set as the current best value.
+                GeneticAlgorithm.GA.best_value = best_value
+            #If it is any other iteration:
+            else:
+                #A check is done to see if the current best value is better than the global best value.
+                if(best_value > GeneticAlgorithm.GA.best_value):
+                    #If it is, the current best value becomes the new global best value.
+                    GeneticAlgorithm.GA.best_value = best_value
+
 
             #Calculating the probabilities of the chromosomes.
             chromosome_probabilities = GeneticAlgorithm.GA.evaluate_probability(chromosome_fitnesses, chromosome_fitness_sum)
@@ -71,3 +82,4 @@ if __name__ == "__main__":
 
             #Printing the value found that maximises the objecive function.
             print "Iteration " + str(i + 1) + " finished. Best value found is " + str(best_value) + ".\n"
+        print "Finished all " + str(args.iterations) + " iterations. The overall best value found is " + str(GeneticAlgorithm.GA.best_value) + ".\n"
