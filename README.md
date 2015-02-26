@@ -9,10 +9,10 @@ Launch the program with default values by navigating to the directory in a termi
 python Main.py
 
 The default values are as follows: 
-range 0 - 100
-1 iteration
-10 chromosomes
-5% mutation rate
+range 0 - 100,
+1 iteration,
+10 chromosomes,
+5% mutation rate.
 
 Command Line Arguments
 -----------------------
