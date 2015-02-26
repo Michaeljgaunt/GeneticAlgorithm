@@ -2,6 +2,8 @@
 import math
 import numpy
 import random
+import matplotlib.pyplot as graph
+import time
 
 class GA:
     
@@ -172,21 +174,29 @@ class GA:
         chrom_len = len(chrom_array[0])
         #Iterating over the number of chromosomes.
         for i in xrange(0, num_chroms):
+            #If mutation rate was entered as 0, the mutator is set as 0.
+            if(mutation_rate == 0):
+                break
             #Iterating over each chromosome bit
             for j in xrange(0, chrom_len):
-                #If mutation rate was entered as 0, the mutator is set as 0.
-                if(mutation_rate == 0):
-                    random_num = 0
-                #If mutation rate is higher than 0:
-                else:
-                    #Generates a random number between 1 and 100.
-                    random_num = random.randint(0, 100)
+                #Generates a random number between 1 and 100.
+                random_num = random.randint(0, 100)
                 #If the random number is less than or equal to the given mutation rate.
                 if (random_num <= mutation_rate):
                     #The bit at the current position is flipped.
                     chrom_array[i][j] = (1 - chrom_array[i][j])
         return list(chrom_array)
-
+    
+    #Defining a method to print the results on a graph.
+    @staticmethod
+    def graph_results(xaxis, yaxis, title, xlabel, ylabel):
+        #Plotting datasets onto the x-axis and y-axis.
+        graph.plot(xaxis, yaxis)
+        graph.title(title)
+        graph.xlabel(xlabel)
+        graph.ylabel(ylabel)
+        graph.show()
+    
 
 class Debug:
 
