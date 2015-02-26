@@ -300,9 +300,9 @@ class Debug:
     def debug(args):
         print "\n----------------------------------- DEBUG MODE ---------------------------------------"
         print "| Generating " + str(args.cnum) + " chromosomes.                                                          |"                                     
-        print "| Squeezing with a range of " + str(args.lowerval) + " - " + str(args.upperval) + "                                                  |"
+        print "| Squeezing with a range of " + str(args.lowerval) + " - " + str(args.upperval) + "                                                   |"
         print "| Iterating " + str(args.iterations) + " times.                                                                 |"
-        print "| Mutation rate is " + str(args.mutrate) + "%.                                                              |"
+        print "| Mutation rate is " + str(args.mutrate) + "%.                                                               |"
         print "|                                                                                    |"
         print "| The debug statements are printed in the order that the functions are               |"
         print "| called in __main__                                                                 |"
