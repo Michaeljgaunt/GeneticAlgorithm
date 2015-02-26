@@ -163,7 +163,7 @@ def mutate(mutation_rate, chrom_array):
             #Generates a random number based on the given mutation rate.
             mutation = random.randint(0, (100 / mutation_rate))
             #If that number is 1
-            if (mutation == 20):
+            if (mutation == 1):
                 #The bit at the current position is flipped.
                 chrom_array[i][j] = (1 - chrom_array[i][j])
     return list(chrom_array)
@@ -172,54 +172,74 @@ def mutate(mutation_rate, chrom_array):
 def debug():
     print "----------------------------------- DEBUG MODE ---------------------------------------"
     print "| Generating 4 chromosomes of length 5.                                              |"                                     
-    print "| Squeezing with a range of 2-60                                                     |"
-    print "| iterating 5 times.                                                                 |"
+    print "| Squeezing with a range of 2 - 60                                                   |"
+    print "| Iterating 3 times.                                                                 |"
+    print "| Mutation rate is 75%.                                                              |"
+    print "|                                                                                    |"
+    print "| The debug statements are printed in the order that the functions are               |"
+    print "| called in __main__                                                                 |"
     print "|                                                                                    |"
     print "| Layout:                                                                            |"
-    print "| [Description of event] (corresponding function name): [values returned by function]|"
+    print "| [Description of event] [Possible errors to check] (corresponding function name):   |"
+    print "| [values returned by function]                                                      |"
     print "--------------------------------------------------------------------------------------\n"
     
     #Generating 4 chromosomes that hold a 5-bit bitstring.
     chromosomes = generate_chromosomes(31, 4)
-    print "Original chromosomes (generate_chromosomes): " + str(chromosomes) 
+    print "\n[Randomly generating first set of chromosomes] [Check that there are 4 chromosomes of length 5] (generate_chromosomes): "
+    print str(chromosomes) 
+    print ""
+    print ""
     
     #Iterating the algorithm 5 times.
-    for i in xrange(0, 5):
+    for i in xrange(0, 3):
         print "\nBeginning iteration " + str(i + 1) + "."
 
-        #Calculating the integer values of the bit string chromosomes, squeezing in a range of 2-60.
+        #Calculating the decimal values of the bit string chromosomes, squeezing in a range of 2-60.
         chromosome_values = convert_bitstring(chromosomes, 2, 60)
-        print "Converting to integers (convert_bitstring): " + str(chromosome_values)
+        print "\n[Converting to decimals] [Check the values are squeezed within the bounds] (convert_bitstring): " 
+        print str(chromosome_values)
         #Evaluating the chromosomes' fitness and summing their values.
         chromosome_evaluation = evaluate_fitness(chromosome_values)
         chromosome_fitnesses = chromosome_evaluation.get("fitnesses")
-        print "Evaluating fitnesses (evaluate_fitness): " + str(chromosome_fitnesses)
+        print "\n[Evaluating fitnesses] [n/a] (evaluate_fitness): "
+        print str(chromosome_fitnesses)
         chromosome_fitness_sum = chromosome_evaluation.get("sum")
-        print "Evaluating sigma-fitness (evaluate_fitness): " + str(chromosome_fitness_sum)
+        print "\n[Evaluating sigma-fitness] [Check this value is roughly the sum of the above values] (evaluate_fitness): "
+        print str(chromosome_fitness_sum)
 
         #Finding the index of the maximal fitness value and using it to find the variable value that caused the fitness value.
         best_index = chromosome_fitnesses.index(max(chromosome_fitnesses))
-        print "Finding index of best fitness value: " + str(best_index)
+        print "\n[Finding index of best fitness value] [Check the index is correct] (chromosome_fitnesses.index(max(chromosome_fitnesses))): "
+        print str(best_index)
         best_value = chromosome_values[best_index]
-        print "Finding the best integer value generated using the index: " + str(best_value)
+        print "\n[Finding the best decimal value generated using the index] [Check against the value array to make sure this is the actual best value] (chromosome_values[best_index]): "
+        print str(best_value)
 
         #Calculating the probabilities of the chromosomes.
         chromosome_probabilities = evaluate_probability(chromosome_fitnesses, chromosome_fitness_sum)
-        print "Calculating the probabilities of the chromosomes (evaluate_probabilities): " +str(chromosome_probabilities)
+        print "\n[Calculating the probabilities of the chromosomes] [Check these values sum to approximately 1] (evaluate_probabilities): "
+        print str(chromosome_probabilities)
 
         #Roulette ranking the chromosomes according to their probabilities.
         potential_parents = roulette_rank(chromosomes, chromosome_probabilities)
-        print "Ranking potential parents using the roulette system (roulette_rank): " + str(potential_parents)
+        print "\n[Ranking potential parents using the roulette system] [Check that the first member is the surviving best parent] (roulette_rank): "
+        print str(potential_parents)
 
         #Performing crossover with the roulette ranked parents.
         children = crossover(potential_parents)
-        print "Performing crossover (crossover): " + str(children)
+        print "\n[Performing crossover] [n/a] (crossover): "
+        print str(children)
         
-        #Mutating the children with a 5% mutation rate.
-        mutated_children = mutate(5, children)
-        print "Mutating (mutate): " + str(mutated_children)
+        #Mutating the children with a 75% mutation rate.
+        mutated_children = mutate(75, children)
+        print "\n[Mutating] [n/a] [Check that roughly 3/4 of the bits are flipping] (mutate): "
+        print str(mutated_children)
         
         #Setting the mutated children as the original chromosomes for the next loop iteration.
         chromosomes = mutated_children
-        print "Setting the children as the new 'original' chromosomes for next iteration: " + str(chromosomes)
+        print "\n[Setting the children as the new 'original' chromosomes for next iteration] [Compare with original chromosomes to make sure they are different] (assignment): "
+        print str(chromosomes)
+        print ""
+        print ""
     print "\n----- END DEBUG -----"

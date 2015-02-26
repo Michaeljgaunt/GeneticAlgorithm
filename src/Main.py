@@ -31,7 +31,7 @@ if __name__ == "__main__":
         #Iterating the algorithm n times (n provided in command line arguments).
         for i in xrange(0, args.iterations):
 
-            #Calculating the integer values of the bit string chromosomes. Passing in the range from the command line arguments to squeeze the values.
+            #Calculating the decimal values of the bit string chromosomes. Passing in the range from the command line arguments to squeeze the values.
             chromosome_values = GeneticAlgorithm.convert_bitstring(chromosomes, args.lowerval, args.upperval)
 
             #Evaluating the chromosomes' fitness and summing their values.
