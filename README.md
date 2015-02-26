@@ -36,3 +36,8 @@ Allows input of the desired number of iterations for the algorithm. If this comm
 -m (interger) or --mutrate (integer)
 
 Allows input of the desired mutation rate. If this command is not used, the program defaults to a 5% mutation rate.
+
+
+-d or --debug
+
+Enter debug mode.
