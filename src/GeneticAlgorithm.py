@@ -235,7 +235,7 @@ class Debug:
     #Defining a debug version of the crossover function
     @staticmethod
     def crossover(chrom_array):
-        print "\n[Performing crossover] [n/a] (crossover): "
+        print "\n[Performing crossover] [Check the parents have been cut correctly] (crossover): "
         #Saving number of the chromosomes.
         chrom_num = len(chrom_array)
         #Saving length of chromosomes.
@@ -267,15 +267,42 @@ class Debug:
         print "\nCrossover completed: "
         print str(child_array)
         return child_array
+    
+    #Defining a debug version of the mutate function.
+    @staticmethod
+    def mutate(mutation_rate, chrom_array):
+        print "\n[Mutating] [Check that some bits are flipping] (mutate): "
+        #Saving the number of chromosomes.
+        num_chroms = len(chrom_array)
+        #Saving the length of chromosomes.
+        chrom_len = len(chrom_array[0])
+        #Iterating over the number of chromosomes.
+        for i in xrange(0, num_chroms):
+            #Iterating over each chromosome bit
+            for j in xrange(0, chrom_len):
+                #If mutation rate was entered as 0, the mutator is set as 0.
+                if(mutation_rate == 0):
+                    random_num = 0
+                #If mutation rate is higher than 0:
+                else:
+                    #Generates a random number between 1 and 100.
+                    random_num = random.randint(0, 100)
+                #If the random number is less than or equal to the given mutation rate.
+                if (random_num <= mutation_rate):
+                    print "Chromosome number " + str(i + 1) + ", bit number " + str(j + 1) + " has mutated to " + str(1 - chrom_array[i][j]) + "."
+                    #The bit at the current position is flipped.
+                    chrom_array[i][j] = (1 - chrom_array[i][j])
+        print list(chrom_array)
+        return list(chrom_array)
 
     #Defining a function to launch a debug of the genetic algorithm.
     @staticmethod
-    def debug():
+    def debug(args):
         print "\n----------------------------------- DEBUG MODE ---------------------------------------"
-        print "| Generating 4 chromosomes of length 5.                                              |"                                     
-        print "| Squeezing with a range of 0 - 100                                                  |"
-        print "| Iterating 3 times.                                                                 |"
-        print "| Mutation rate is 100%.                                                              |"
+        print "| Generating " + str(args.cnum) + " chromosomes.                                                          |"                                     
+        print "| Squeezing with a range of " + str(args.lowerval) + " - " + str(args.upperval) + "                                                  |"
+        print "| Iterating " + str(args.iterations) + " times.                                                                 |"
+        print "| Mutation rate is " + str(args.mutrate) + "%.                                                              |"
         print "|                                                                                    |"
         print "| The debug statements are printed in the order that the functions are               |"
         print "| called in __main__                                                                 |"
@@ -285,19 +312,19 @@ class Debug:
         print "| [values returned by function]                                                      |"
         print "--------------------------------------------------------------------------------------\n"
         
-        #Generating 4 chromosomes that hold a 5-bit bitstring.
-        chromosomes = GA.generate_chromosomes(31, 4)
+        #Generating chromosomes.
+        chromosomes = GA.generate_chromosomes(args.upperval, args.cnum)
         print "\n[Randomly generating first set of chromosomes] [Check that there are 4 chromosomes of length 5] (generate_chromosomes): "
         print str(chromosomes) 
         print ""
         print ""
         
         #Iterating the algorithm 5 times.
-        for i in xrange(0, 3):
+        for i in xrange(0, args.iterations):
             print "\nBeginning iteration " + str(i + 1) + "."
 
             #Calculating the decimal values of the bit string chromosomes, squeezing in a range of 2-60.
-            chromosome_values = GA.convert_bitstring(chromosomes, 0, 100)
+            chromosome_values = GA.convert_bitstring(chromosomes, args.lowerval, args.upperval)
             print "\n[Converting to decimals] [Check the values are squeezed within the bounds] (convert_bitstring): " 
             print str(chromosome_values)
             #Evaluating the chromosomes' fitness and summing their values.
@@ -328,10 +355,8 @@ class Debug:
             #Performing crossover with the roulette ranked parents.
             children = Debug.crossover(potential_parents)
             
-            #Mutating the children with a 50% mutation rate.
-            mutated_children = GA.mutate(100, children)
-            print "\n[Mutating] [n/a] [Check that all of the bits are flipping] (mutate): "
-            print str(mutated_children)
+            #Mutating the children.
+            mutated_children = Debug.mutate(args.mutrate, children)
             
             #Setting the mutated children as the original chromosomes for the next loop iteration.
             chromosomes = mutated_children

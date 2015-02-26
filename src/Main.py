@@ -1,5 +1,6 @@
 
 import argparse
+import sys
 import GeneticAlgorithm
 
 #Main method.
@@ -8,18 +9,24 @@ if __name__ == "__main__":
     #Adding an ArgumentParser to set up command line commands.
     parser = argparse.ArgumentParser(description="Genetic algorithm to evaluate the best variables to maximise an objective function", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     #Adding commands.
-    parser.add_argument("-i", "--iterations", help="Enter the command followed by an integer number to represent the number of desired iterations of the genetic algorithm.", default='5', type=int)
+    parser.add_argument("-i", "--iterations", help="Enter the command followed by an integer number to represent the number of desired iterations of the genetic algorithm.", default='3', type=int)
     parser.add_argument("-l", "--lowerval", help="Enter the minimum value for the variable.", default='0', type=int)
-    parser.add_argument("-u", "--upperval", help="Enter the maximum value for the variable.", default='100', type=int)
-    parser.add_argument("-c", "--cnum", help="Enter a value for the desired number of chromosomes.",  default='10', type=int)
+    parser.add_argument("-u", "--upperval", help="Enter the maximum value for the variable.", default='31', type=int)
+    parser.add_argument("-c", "--cnum", help="Enter an even integer value for the desired number of chromosomes.",  default='4', type=int)
     parser.add_argument("-m", "--mutrate", help="Enter a value for the desired mutation rate (integer from 1 - 100).", default='5', type=int, choices=range(1, 101), metavar="")
     parser.add_argument("-d", "--debug", help="Debug mode.", action='store_true')
 
     #Parsing the command line arguments.
     args = parser.parse_args()
     
+    #Checking to see if the command line input for number of chromosomes is an even number.
+    if(args.cnum % 2 != 0):
+        #If it's not, print a statement to the console and exit the program.
+        print "The number of desired chromosomes must be even for crossover to work."
+        sys.exit(1)
+    
     if(args.debug):
-        GeneticAlgorithm.Debug.debug()
+        GeneticAlgorithm.Debug.debug(args)
     else:
         print "\nThe algorithm will iterate " + str(args.iterations) + " time(s)."
         print str(args.cnum ) + " chromosomes will be randomly generated. "
