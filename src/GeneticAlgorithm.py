@@ -174,7 +174,7 @@ def debug():
     print "| Generating 4 chromosomes of length 5.                                              |"                                     
     print "| Squeezing with a range of 2 - 60                                                   |"
     print "| Iterating 3 times.                                                                 |"
-    print "| Mutation rate is 75%.                                                              |"
+    print "| Mutation rate is 50%.                                                              |"
     print "|                                                                                    |"
     print "| The debug statements are printed in the order that the functions are               |"
     print "| called in __main__                                                                 |"
@@ -231,9 +231,9 @@ def debug():
         print "\n[Performing crossover] [n/a] (crossover): "
         print str(children)
         
-        #Mutating the children with a 75% mutation rate.
-        mutated_children = mutate(75, children)
-        print "\n[Mutating] [n/a] [Check that roughly 3/4 of the bits are flipping] (mutate): "
+        #Mutating the children with a 50% mutation rate.
+        mutated_children = mutate(50, children)
+        print "\n[Mutating] [n/a] [Check that roughly half of the bits are flipping] (mutate): "
         print str(mutated_children)
         
         #Setting the mutated children as the original chromosomes for the next loop iteration.
