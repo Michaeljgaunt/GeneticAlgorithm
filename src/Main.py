@@ -21,9 +21,10 @@ if __name__ == "__main__":
     if(args.debug):
         GeneticAlgorithm.debug()
     else:
-        print "The algorithm will iterate " + str(args.iterations) + " time(s)."
+        print "\nThe algorithm will iterate " + str(args.iterations) + " time(s)."
+        print str(args.cnum ) + " chromosomes will be randomly generated. "
         print "Generated variables will be squeezed into the range: " + str(args.lowerval) + " - " + str(args.upperval) + "."
-        print str(args.cnum ) + " chromosomes will be randomly generated. Following each iteration, a mutation rate of " + str(args.mutrate) + "% will be applied."
+        print "Following each iteration, a mutation rate of " + str(args.mutrate) + "% will be applied."
         print "\nGenerating chromosomes..."
         #Randomly generating n chromosomes (n provided in command line arguments). Length of the chromosome is determined by the upper bound given in the command line arguments.
         chromosomes = GeneticAlgorithm.generate_chromosomes(args.upperval, args.cnum)
