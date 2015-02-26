@@ -199,7 +199,7 @@ class Debug:
         #Iterating over the number of chromosomes.
         for i in xrange(0, len(chrom_array)):
             if (i != 0):
-                print "\nRandom number is: " + str(random_num)
+                print "\nGenerating random number: " + str(random_num)
             #If the parent array is not empty:
             if(parent_array):
                 #Iterating over the number of chromosomes.
@@ -219,6 +219,7 @@ class Debug:
                         random_num = random.random()
                         #Breaking into the outer for loop.
                         break
+                    print "total is less than random number, getting next chromosome."
             #If the parent array is empty:
             else:
                 print "Adding surviving parent: "
@@ -227,12 +228,47 @@ class Debug:
                 #Appending the best chromosome in the parent array to ensure its survival.
                 parent_array.append(chrom_array[best_index])
                 print str(chrom_array[best_index])
-        print "Roulette ranking has finished: "
+        print "\nRoulette ranking completed: "
         print str(parent_array)
         return parent_array
 
+    #Defining a debug version of the crossover function
+    @staticmethod
+    def crossover(chrom_array):
+        print "\n[Performing crossover] [n/a] (crossover): "
+        #Saving number of the chromosomes.
+        chrom_num = len(chrom_array)
+        #Saving length of chromosomes.
+        chrom_len = len(chrom_array[0])
+        #making new array to hold child chromosomes.
+        child_array = []
+        #Iterating over the number of chromosome pairs.
+        for i in xrange(1, ((chrom_num / 2) + 1)):
+            print "\nCrossover " + str(i)
+            #Getting the chromosomes in the pair.
+            chrom_a = chrom_array[(2 * i) - 2]
+            chrom_b = chrom_array[(2 * i) - 1]
+            print "Parent 1: " + str(chrom_a)
+            print "Parent 2: " + str(chrom_b)
+            #Randomly generating a cut point.
+            cut_point = random.randint(1, (chrom_len - 1))
+            print "Generating cut point: " + str(cut_point)
+            #Cutting both chromosomes and combining the segments (one from each parent). Saving as a new chromosome.
+            child_a = list(chrom_a[0:cut_point]) + list(chrom_b[cut_point:])
+            child_b = list(chrom_b[0:cut_point]) + list(chrom_a[cut_point:])
+            print "Child 1 will consist of: "
+            print "Parent 1, fragment 1: " + str(list(chrom_a[0:cut_point])) + " and parent 2, fragment 2: " + str(list(chrom_b[cut_point:]))
+            print "Child 2 will consist of: "
+            print "Parent 2, fragment 1: " + str(list(chrom_b[0:cut_point])) + " and parent 1, fragment 2: " + str(list(chrom_a[cut_point:]))
+            #Appending the two child chromosomes in the child array.
+            child_array.append(child_a)
+            child_array.append(child_b)
+        #Returning the child chromosomes.
+        print "\nCrossover completed: "
+        print str(child_array)
+        return child_array
 
-    #Defining a function to aid in debugging.
+    #Defining a function to launch a debug of the genetic algorithm.
     @staticmethod
     def debug():
         print "\n----------------------------------- DEBUG MODE ---------------------------------------"
@@ -290,9 +326,7 @@ class Debug:
             potential_parents = Debug.roulette_rank(chromosomes, chromosome_probabilities)
 
             #Performing crossover with the roulette ranked parents.
-            children = GA.crossover(potential_parents)
-            print "\n[Performing crossover] [n/a] (crossover): "
-            print str(children)
+            children = Debug.crossover(potential_parents)
             
             #Mutating the children with a 50% mutation rate.
             mutated_children = GA.mutate(100, children)
