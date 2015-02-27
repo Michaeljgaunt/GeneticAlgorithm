@@ -14,6 +14,7 @@ if __name__ == "__main__":
     parser.add_argument("-u", "--upperval", help="Enter the maximum value for the variable.", default='31', type=int)
     parser.add_argument("-c", "--cnum", help="Enter an even integer value for the desired number of chromosomes.",  default='4', type=int)
     parser.add_argument("-m", "--mutrate", help="Enter a value for the desired mutation rate (integer from 0 - 100).", default='5', type=int, choices=range(0, 101), metavar="")
+    parser.add_argument("-s", "--slicepoints", help="Enter the number of slice points to use during crossover.", default='1', type=int)
     optfunc = parser.add_mutually_exclusive_group()
     optfunc.add_argument("-d", "--debug", help="Debug mode.", action='store_true')
     optfunc.add_argument("-p", "--plot", help="Plot a graph of the results.", action='store_true')
@@ -45,8 +46,9 @@ if __name__ == "__main__":
             print "The chromosomes will be ranked according to the roulette method."
         if(args.tournamentrank):
             print "The chromosomes will be ranked according to the tournament method (tournament size is set as " + str(args.tournamentrank) + ")."
+        print str(args.slicepoints) + " slice point(s) will be used during crossover."
         print "Following each iteration, a mutation rate of " + str(args.mutrate) + "% will be applied."
-        print "\nGenerating chromosomes..."
+        print "\nGenerating chromosomes...\n"
         #Randomly generating n chromosomes (n provided in command line arguments). Length of the chromosome is determined by the upper bound given in the command line arguments.
         chromosomes = GeneticAlgorithm.GA.generate_chromosomes(args.upperval, args.cnum)        
         #If plot mode is engaged:
@@ -104,7 +106,7 @@ if __name__ == "__main__":
 
             #Performing crossover with the roulette ranked parents.
             print "Performing crossover and mutation..."
-            children = GeneticAlgorithm.GA.crossover(potential_parents)
+            children = GeneticAlgorithm.GA.crossover(potential_parents, 2)
 
             #Mutating the children by the mutation rate given in the command line arguments.
             mutated_children = GeneticAlgorithm.GA.mutate(args.mutrate, children)
