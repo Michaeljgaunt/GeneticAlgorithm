@@ -169,11 +169,9 @@ class GA:
             parent_array.append(winner_chrom)
         return parent_array
 
-
-
     #Defining a function to perform crossover of chromosomes.
     @staticmethod
-    def crossover(chrom_array):
+    def crossover(chrom_array, num_cuts):
         #Saving number of the chromosomes.
         chrom_num = len(chrom_array)
         #Saving length of chromosomes.
@@ -185,16 +183,29 @@ class GA:
             #Getting the chromosomes in the pair.
             chrom_a = chrom_array[(2 * i) - 2]
             chrom_b = chrom_array[(2 * i) - 1]
-            #Randomly generating a cut point.
-            cut_point = random.randint(1, (chrom_len - 1))
-            #Cutting both chromosomes and combining the segments (one from each parent). Saving as a new chromosome.
-            child_a = list(chrom_a[0:cut_point]) + list(chrom_b[cut_point:])
-            child_b = list(chrom_b[0:cut_point]) + list(chrom_a[cut_point:])
+            #Iterating for number of cut points
+            for i in xrange(0, num_cuts):
+                #Randomly generating a cut point.
+                cut_point = random.randint(1, (chrom_len - 1))
+                recombined = GA.recombination(chrom_a, chrom_b, cut_point)
+                child_a = recombined.get("child_a")
+                child_b = recombined.get("child_a")
+                chrom_a = child_a
+                chrom_b = child_b
             #Appending the two child chromosomes in the child array.
-            child_array.append(child_a)
-            child_array.append(child_b)
+            child_array.append(chrom_a)
+            child_array.append(chrom_b)
         #Returning the child chromosomes.
         return child_array
+
+    #Defining a function to cut two chromosomes and recombine them.
+    @staticmethod
+    def recombination(chrom_a, chrom_b, cut_point):
+        #Cutting both chromosomes and combining the segments (one from each parent). Saving as a new chromosome.
+        child_a = list(chrom_a[0:cut_point]) + list(chrom_b[cut_point:])
+        child_b = list(chrom_b[0:cut_point]) + list(chrom_a[cut_point:])
+        #Returning children in a dicitonary.
+        return {"child_a":child_a, "child_b":child_b}
 
     #Defining a function to randomly mutate bit values in a chromosome according to a given mutation rate.
     @staticmethod
@@ -320,7 +331,7 @@ class Debug:
 
     #Defining a debug version of the crossover function
     @staticmethod
-    def crossover(chrom_array):
+    def crossover(chrom_array, num_cuts):
         print "\n[Performing crossover] [Check the parents have been cut correctly] (crossover): "
         #Saving number of the chromosomes.
         chrom_num = len(chrom_array)
@@ -330,29 +341,48 @@ class Debug:
         child_array = []
         #Iterating over the number of chromosome pairs.
         for i in xrange(1, ((chrom_num / 2) + 1)):
-            print "\nCrossover " + str(i)
             #Getting the chromosomes in the pair.
             chrom_a = chrom_array[(2 * i) - 2]
             chrom_b = chrom_array[(2 * i) - 1]
-            print "Parent 1: " + str(chrom_a)
-            print "Parent 2: " + str(chrom_b)
-            #Randomly generating a cut point.
-            cut_point = random.randint(1, (chrom_len - 1))
-            print "Generating cut point: " + str(cut_point)
-            #Cutting both chromosomes and combining the segments (one from each parent). Saving as a new chromosome.
-            child_a = list(chrom_a[0:cut_point]) + list(chrom_b[cut_point:])
-            child_b = list(chrom_b[0:cut_point]) + list(chrom_a[cut_point:])
-            print "Child 1 will consist of: "
-            print "Parent 1, fragment 1: " + str(list(chrom_a[0:cut_point])) + " and parent 2, fragment 2: " + str(list(chrom_b[cut_point:]))
-            print "Child 2 will consist of: "
-            print "Parent 2, fragment 1: " + str(list(chrom_b[0:cut_point])) + " and parent 1, fragment 2: " + str(list(chrom_a[cut_point:]))
+            if(i == 1):    
+                print "\nParent 1: " + str(chrom_a)
+                print "Parent 2: " + str(chrom_b)
+            print "\nThere will be " + str(num_cuts) + " cutting points."
+            #Iterating for number of cut points
+            for j in xrange(0, num_cuts):
+                #Randomly generating a cut point.
+                cut_point = random.randint(1, (chrom_len - 1))
+                print "Cutting point " + str(j + 1) + " is at position " + str(cut_point) + ".\n"
+                recombined = Debug.recombination(chrom_a, chrom_b, cut_point)
+                child_a = recombined.get("child_a")
+                child_b = recombined.get("child_b")
+                print "Child 1 is: " + str(child_a)
+                print "Child 2 is: " + str(child_b) + "\n"
+
+                chrom_a = child_a
+                chrom_b = child_b
             #Appending the two child chromosomes in the child array.
-            child_array.append(child_a)
-            child_array.append(child_b)
+            child_array.append(chrom_a)
+            child_array.append(chrom_b)
         #Returning the child chromosomes.
-        print "\nCrossover completed: "
+        print "Crossover completed: "
         print str(child_array)
-        return child_array
+        return child_array  
+
+    #Defining a debug version of the recombination function.
+    @staticmethod
+    def recombination(chrom_a, chrom_b, cut_point):
+        #Cutting both chromosomes and combining the segments (one from each parent). Saving as a new chromosome.
+        child_a = list(chrom_a[0:cut_point]) + list(chrom_b[cut_point:])
+        child_b = list(chrom_b[0:cut_point]) + list(chrom_a[cut_point:])
+        print "Child 1 will consist of: "
+        print "Parent 1, fragment 1: " + str(list(chrom_a[0:cut_point]))
+        print "and parent 2, fragment 2: " + str(list(chrom_b[cut_point:]))
+        print "Child 2 will consist of: "
+        print "Parent 2, fragment 1: " + str(list(chrom_b[0:cut_point]))
+        print "and parent 1, fragment 2: " + str(list(chrom_a[cut_point:]))
+        #Returning children in a dicitonary.
+        return {"child_a":child_a, "child_b":child_b}      
     
     #Defining a debug version of the mutate function.
     @staticmethod
@@ -444,7 +474,7 @@ class Debug:
                 potential_parents = Debug.tournament_rank(chromosomes, chromosome_probabilities, args.tournamentrank)
 
             #Performing crossover with the roulette ranked parents.
-            children = Debug.crossover(potential_parents)
+            children = Debug.crossover(potential_parents, 2)
             
             #Mutating the children.
             mutated_children = Debug.mutate(args.mutrate, children)
