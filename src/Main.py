@@ -2,6 +2,7 @@
 import argparse
 import sys
 import GeneticAlgorithm    
+import Debug
     
 #Main method.
 if __name__ == "__main__":
@@ -36,7 +37,7 @@ if __name__ == "__main__":
     #If debug mode is engaged:
     if(args.debug):
         #The debug function is called.
-        GeneticAlgorithm.Debug.debug(args)
+        Debug.debug(args)
     #If not, the program carries on as usual.
     else:
         print "\nThe algorithm will iterate " + str(args.iterations) + " time(s)."
