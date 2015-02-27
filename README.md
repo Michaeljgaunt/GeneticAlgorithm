@@ -78,3 +78,12 @@ Enter debug mode.
 
 
 
+-p
+
+--plot
+
+
+Plot the results of the genetic algorithm on a graph.
+
+
+
