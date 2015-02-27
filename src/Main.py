@@ -14,8 +14,9 @@ if __name__ == "__main__":
     parser.add_argument("-u", "--upperval", help="Enter the maximum value for the variable.", default='31', type=int)
     parser.add_argument("-c", "--cnum", help="Enter an even integer value for the desired number of chromosomes.",  default='4', type=int)
     parser.add_argument("-m", "--mutrate", help="Enter a value for the desired mutation rate (integer from 0 - 100).", default='5', type=int, choices=range(0, 101), metavar="")
-    parser.add_argument("-d", "--debug", help="Debug mode.", action='store_true')
-    parser.add_argument("-p", "--plot", help="Plot a graph of the results.", action='store_true')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-d", "--debug", help="Debug mode.", action='store_true')
+    group.add_argument("-p", "--plot", help="Plot a graph of the results.", action='store_true')
 
 
     #Parsing the command line arguments.
