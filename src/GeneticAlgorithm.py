@@ -385,7 +385,6 @@ class Debug:
     @staticmethod
     def debug(args):
         print "\n----------------------------------- DEBUG MODE ---------------------------------------"
-<<<<<<< HEAD
         print "Generating " + str(args.cnum) + " chromosomes."                                     
         print "Squeezing with a range of " + str(args.lowerval) + " - " + str(args.upperval) + ""
         print "Iterating " + str(args.iterations) + " times."
@@ -399,19 +398,6 @@ class Debug:
         print "Layout:"
         print "[Description of event] [Possible errors to check] (corresponding function name):"
         print "[values returned by function]"
-=======
-        print "| Generating " + str(args.cnum) + " chromosomes.                                                          |"                                     
-        print "| Squeezing with a range of " + str(args.lowerval) + " - " + str(args.upperval) + "                                                   |"
-        print "| Iterating " + str(args.iterations) + " times.                                                                 |"
-        print "| Mutation rate is " + str(args.mutrate) + "%.                                                               |"
-        print "|                                                                                    |"
-        print "| The debug statements are printed in the order that the functions are               |"
-        print "| called in __main__                                                                 |"
-        print "|                                                                                    |"
-        print "| Layout:                                                                            |"
-        print "| [Description of event] [Possible errors to check] (corresponding function name):   |"
-        print "| [values returned by function]                                                      |"
->>>>>>> master
         print "--------------------------------------------------------------------------------------\n"
         
         #Generating chromosomes.
