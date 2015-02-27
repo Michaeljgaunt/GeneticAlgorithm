@@ -64,6 +64,7 @@ if __name__ == "__main__":
             #Finding the index of the maximal fitness value and using it to find the variable value that caused the fitness value.
             best_index = chromosome_fitnesses.index(max(chromosome_fitnesses))
             best_value = chromosome_values[best_index]
+
             #If it is the first iteration:
             if(i == 0):
                 #The global best value is set as the current best value.
@@ -86,7 +87,7 @@ if __name__ == "__main__":
 
             #Roulette ranking the chromosomes according to their probabilities.
             print "Ranking potential parents..."
-            potential_parents = GeneticAlgorithm.GA.roulette_rank(chromosomes, chromosome_probabilities)
+            potential_parents = GeneticAlgorithm.GA.tournament_rank(chromosomes, chromosome_probabilities, 3)
 
             #Performing crossover with the roulette ranked parents.
             print "Performing crossover and mutation..."

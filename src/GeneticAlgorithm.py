@@ -28,10 +28,10 @@ class GA:
         for i in xrange(0, (chrom_num)):
             #Iterating over each bit in the bit string
             for j in xrange(0, (bs_length - 1)):
-                #Finding a random integer between 0 and 9 inclusive.
-                rand_int = random.randint(0, 9)
+                #Finding a random integer between 1 and 10 inclusive.
+                rand_int = random.randint(1, 10)
                 #If the integer is <= 4, the bit in question is assigned a 0.
-                if(rand_int <= 4):
+                if(rand_int <= 5):
                     chrom_array[i][j] = 0
                 #If the integer is >= 5, the bit in question is assigned a 1.                
                 else:
@@ -105,21 +105,23 @@ class GA:
         #Returning the probability array
         return list(prob_array)
 
-    #Defining a function to rank the chromosomes based on the roulette method using their probabilities.
+    #Defining a function to rank the chromosomes based on the roulette method.
     @staticmethod
     def roulette_rank(chrom_array, prob_array):
         #Instantiating the total value.
         total = 0
+        #Saving the number of chromosomes.
+        num_chroms = len(chrom_array)
         #Creating a new array to hold the chosen chromosomes.
         parent_array = []
         #Generating a random float between 0 and 1.
         random_num = random.random()
         #Iterating over the number of chromosomes.
-        for i in xrange(0, len(chrom_array)):
+        for i in xrange(0, num_chroms):
             #If the parent array is not empty:
             if(parent_array):
                 #Iterating over the number of chromosomes.
-                for i in xrange(0, len(chrom_array)):
+                for i in xrange(0, num_chroms):
                     #Adding the current iterating probability to the total.
                     total += prob_array[i]
                     #If the total is greater than the random number:
@@ -139,6 +141,34 @@ class GA:
                 #Appending the best chromosome in the parent array to ensure its survival.
                 parent_array.append(chrom_array[best_index])
         return parent_array
+
+    #Defining a function to rank the chromosomes based on the k-tournament method.
+    @staticmethod
+    def tournament_rank(chrom_array, prob_array, tourney_size):
+        #Saving the number of chromosomes.
+        num_chroms = len(chrom_array)
+        #Instantiating an array to hold the tournament selected chromosomes.
+        tourney_array = []
+        #instantiating an array to hold the selected parents.
+        parent_array = []
+        #Iterating over the number of chromosomes.
+        for i in xrange(0, num_chroms):
+            #Iterating over the size of the tournament:
+            for j in xrange(0, tourney_size):
+                #Finding a random integer between 0 and 1 less than the chromosomal number inclusive.
+                rand_int = random.randint(0, (num_chroms - 1))
+                #Using the random integer to index into the probability array.
+                tourney_array.append(prob_array[rand_int])
+            #Finding the tournament winner
+            tourney_winner = max(tourney_array)
+            #Finding the index of the winner in the probability array.
+            winner_index = prob_array.index(tourney_winner)
+            #Indexing into the chromosome array using the winner index.
+            winner_chrom = chrom_array[winner_index]
+            parent_array.append(winner_chrom)
+        return parent_array
+
+
 
     #Defining a function to perform crossover of chromosomes.
     @staticmethod
