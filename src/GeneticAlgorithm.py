@@ -189,9 +189,13 @@ class GA:
     
     #Defining a method to print the results on a graph.
     @staticmethod
-    def graph_results(xaxis, yaxis, title, xlabel, ylabel):
+    def graph_results(xaxis, yaxis, yaxis2, title, xlabel, ylabel):
         #Plotting datasets onto the x-axis and y-axis.
-        graph.plot(xaxis, yaxis)
+        line1 = graph.plot(xaxis, yaxis)
+        line2 = graph.plot(xaxis, yaxis2)
+        graph.axis([min(xaxis), max(xaxis), (min(yaxis) * 0.95), (max(yaxis2) * 1.05)])
+        graph.setp(line1, color="r")
+        graph.setp(line2, color="b")
         graph.title(title)
         graph.xlabel(xlabel)
         graph.ylabel(ylabel)

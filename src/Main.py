@@ -45,6 +45,7 @@ if __name__ == "__main__":
             #Two arrays are instantiated to hold x-values and y-values.
             x_array = []
             y_array = []
+            global_y_array = []
         
 
         #Iterating the algorithm n times (n provided in command line arguments).
@@ -76,7 +77,8 @@ if __name__ == "__main__":
             if(args.plot):
                 #Iteration number and best value are saved in the plot arrays.
                 x_array.append(i)
-                y_array.append(best_value)     
+                y_array.append(best_value)   
+                global_y_array.append(GeneticAlgorithm.GA.best_value)  
 
             #Calculating the probabilities of the chromosomes.
             chromosome_probabilities = GeneticAlgorithm.GA.evaluate_probability(chromosome_fitnesses, chromosome_fitness_sum)
@@ -99,4 +101,4 @@ if __name__ == "__main__":
             print "Iteration " + str(i + 1) + " finished. Best value found is " + str(best_value) + ".\n"
         print "Finished all " + str(args.iterations) + " iterations. The overall best value found is " + str(GeneticAlgorithm.GA.best_value) + ".\n"
         if (args.plot):
-            GeneticAlgorithm.GA.graph_results(x_array, y_array, "A Graph Showing The Best Generated Value For Each Iteration", "Iteration Number", "Best Generated Value")
+            GeneticAlgorithm.GA.graph_results(x_array, y_array, global_y_array, "A Graph Showing The Best Generated Value For Each Iteration", "Iteration Number", "Best Generated Value")
