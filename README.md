@@ -14,14 +14,31 @@ range 0 - 100,
 10 chromosomes,
 5% mutation rate.
 
-Command Line Arguments
+Required Command line Arguments
+---------------------------------
+
+
+
+-rr
+
+--rouletterank
+
+
+Set the chromosomal ranking method to roulette.
+
+
+-tr (integer)
+
+--tournamentrank (integer)
+
+
+Set the chromosomal ranking method to tournament of size (integer).
+
+
+
+
+Optional Command Line Arguments
 -----------------------
-
-Launch the program with user inputted values by navigating to the directory in a terminal window and typing:
-
-python Main.py
-
-followed by any of the following commands:
 
 
 
