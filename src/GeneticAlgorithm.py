@@ -153,6 +153,7 @@ class GA:
         parent_array = []
         #Iterating over the number of chromosomes.
         for i in xrange(0, num_chroms):
+            tourney_array = []
             #Iterating over the size of the tournament:
             for j in xrange(0, tourney_size):
                 #Finding a random integer between 0 and 1 less than the chromosomal number inclusive.
@@ -280,6 +281,43 @@ class Debug:
         print str(parent_array)
         return parent_array
 
+    #Defining a debug version of the tournament_rank function.
+    @staticmethod
+    def tournament_rank(chrom_array, prob_array, tourney_size):
+        print "\n[Ranking potential parents using the tournament system] [Check that the best chromosome is winning the tournament] (roulette_rank): "
+        #Saving the number of chromosomes.
+        num_chroms = len(chrom_array)
+        #Instantiating an array to hold the tournament selected chromosomes.
+        tourney_array = []
+        #instantiating an array to hold the selected parents.
+        parent_array = []
+        #Iterating over the number of chromosomes.
+        for i in xrange(0, num_chroms):
+            print "\nTournament number: " +str(i + 1)
+            tourney_array = []
+            #Iterating over the size of the tournament:
+            for j in xrange(0, tourney_size):
+                #Finding a random integer between 0 and 1 less than the chromosomal number inclusive.
+                rand_int = random.randint(0, (num_chroms - 1))
+                print "Generating random number: " + str(rand_int)
+                #Using the random integer to index into the probability array.
+                tourney_array.append(prob_array[rand_int])
+                print "Adding chromosome probability to tournament: " + str(prob_array[rand_int])
+            #Finding the tournament winner
+            print "Full tournament is: "
+            print str(tourney_array)
+            tourney_winner = max(tourney_array)
+            print "Tournament winner is: " + str(tourney_winner)
+            #Finding the index of the winner in the probability array.
+            winner_index = prob_array.index(tourney_winner)
+            #Indexing into the chromosome array using the winner index.
+            winner_chrom = chrom_array[winner_index]
+            print "The winner corresponds to chromosome: " + str(chrom_array[winner_index])
+            parent_array.append(winner_chrom)
+        print "\nTournament ranking completed: "
+        print str(parent_array)
+        return parent_array
+
     #Defining a debug version of the crossover function
     @staticmethod
     def crossover(chrom_array):
@@ -319,7 +357,7 @@ class Debug:
     #Defining a debug version of the mutate function.
     @staticmethod
     def mutate(mutation_rate, chrom_array):
-        print "\n[Mutating] [Check that some bits are flipping] (mutate): "
+        print "\n[Mutating] [Check that bits are flipping correctly] (mutate): "
         #Saving the number of chromosomes.
         num_chroms = len(chrom_array)
         #Saving the length of chromosomes.
@@ -347,22 +385,24 @@ class Debug:
     @staticmethod
     def debug(args):
         print "\n----------------------------------- DEBUG MODE ---------------------------------------"
-        print "| Generating " + str(args.cnum) + " chromosomes.                                                          |"                                     
-        print "| Squeezing with a range of " + str(args.lowerval) + " - " + str(args.upperval) + "                                                   |"
-        print "| Iterating " + str(args.iterations) + " times.                                                                 |"
-        print "| Mutation rate is " + str(args.mutrate) + "%.                                                               |"
-        print "|                                                                                    |"
-        print "| The debug statements are printed in the order that the functions are               |"
-        print "| called in __main__                                                                 |"
-        print "|                                                                                    |"
-        print "| Layout:                                                                            |"
-        print "| [Description of event] [Possible errors to check] (corresponding function name):   |"
-        print "| [values returned by function]                                                      |"
+        print "Generating " + str(args.cnum) + " chromosomes."                                     
+        print "Squeezing with a range of " + str(args.lowerval) + " - " + str(args.upperval) + ""
+        print "Iterating " + str(args.iterations) + " times."
+        print "Mutation rate is " + str(args.mutrate) + "%."
+        if(args.rouletterank):
+            print "Chromosomes will be ranked by the roulette method\n"
+        if(args.tournamentrank):
+            print "Chromosomes will be ranked by the tournament method (size " + str(args.tournamentrank) + ")\n"
+        print "The debug statements are printed in the order that the functions are"
+        print "called in __main__\n"
+        print "Layout:"
+        print "[Description of event] [Possible errors to check] (corresponding function name):"
+        print "[values returned by function]"
         print "--------------------------------------------------------------------------------------\n"
         
         #Generating chromosomes.
         chromosomes = GA.generate_chromosomes(args.upperval, args.cnum)
-        print "\n[Randomly generating first set of chromosomes] [Check that there are 4 chromosomes of length 5] (generate_chromosomes): "
+        print "\n[Randomly generating first set of chromosomes] [Check that there are " + str(args.cnum) + " chromosomes] (generate_chromosomes): "
         print str(chromosomes) 
         print ""
         print ""
@@ -397,8 +437,11 @@ class Debug:
             print "\n[Calculating the probabilities of the chromosomes] [Check these values sum to approximately 1] (evaluate_probabilities): "
             print str(chromosome_probabilities)
 
-            #Roulette ranking the chromosomes according to their probabilities.
-            potential_parents = Debug.roulette_rank(chromosomes, chromosome_probabilities)
+            #Ranking the chromosomes according to their probabilities.
+            if(args.rouletterank):
+                potential_parents = Debug.roulette_rank(chromosomes, chromosome_probabilities)
+            if(args.tournamentrank):
+                potential_parents = Debug.tournament_rank(chromosomes, chromosome_probabilities, args.tournamentrank)
 
             #Performing crossover with the roulette ranked parents.
             children = Debug.crossover(potential_parents)

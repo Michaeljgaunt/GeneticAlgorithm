@@ -14,9 +14,13 @@ if __name__ == "__main__":
     parser.add_argument("-u", "--upperval", help="Enter the maximum value for the variable.", default='31', type=int)
     parser.add_argument("-c", "--cnum", help="Enter an even integer value for the desired number of chromosomes.",  default='4', type=int)
     parser.add_argument("-m", "--mutrate", help="Enter a value for the desired mutation rate (integer from 0 - 100).", default='5', type=int, choices=range(0, 101), metavar="")
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("-d", "--debug", help="Debug mode.", action='store_true')
-    group.add_argument("-p", "--plot", help="Plot a graph of the results.", action='store_true')
+    optfunc = parser.add_mutually_exclusive_group()
+    optfunc.add_argument("-d", "--debug", help="Debug mode.", action='store_true')
+    optfunc.add_argument("-p", "--plot", help="Plot a graph of the results.", action='store_true')
+    rank = parser.add_mutually_exclusive_group(required=True)
+    rank.add_argument("-rr", "--rouletterank", help="Rank potential parent chromosomes based on the roulette method.", action='store_true')
+    rank.add_argument("-tr", "--tournamentrank", help="Rank potential parent chromosomes based on the tournament method.", type=int)
+
 
 
     #Parsing the command line arguments.
@@ -37,6 +41,10 @@ if __name__ == "__main__":
         print "\nThe algorithm will iterate " + str(args.iterations) + " time(s)."
         print str(args.cnum ) + " chromosomes will be randomly generated. "
         print "Generated variables will be squeezed into the range: " + str(args.lowerval) + " - " + str(args.upperval) + "."
+        if(args.rouletterank):
+            print "The chromosomes will be ranked according to the roulette method."
+        if(args.tournamentrank):
+            print "The chromosomes will be ranked according to the tournament method (tournament size is set as " + str(args.tournamentrank) + ")."
         print "Following each iteration, a mutation rate of " + str(args.mutrate) + "% will be applied."
         print "\nGenerating chromosomes..."
         #Randomly generating n chromosomes (n provided in command line arguments). Length of the chromosome is determined by the upper bound given in the command line arguments.
@@ -85,9 +93,14 @@ if __name__ == "__main__":
             #Calculating the probabilities of the chromosomes.
             chromosome_probabilities = GeneticAlgorithm.GA.evaluate_probability(chromosome_fitnesses, chromosome_fitness_sum)
 
-            #Roulette ranking the chromosomes according to their probabilities.
+            #Ranking the potential parent chromosomes.
             print "Ranking potential parents..."
-            potential_parents = GeneticAlgorithm.GA.tournament_rank(chromosomes, chromosome_probabilities, 3)
+            #By roulette method. 
+            if(args.rouletterank):
+                potential_parents = GeneticAlgorithm.GA.roulette_rank(chromosomes, chromosome_probabilities)
+            #By tournament method.
+            if(args.tournamentrank):
+                potential_parents = GeneticAlgorithm.GA.tournament_rank(chromosomes, chromosome_probabilities, args.tournamentrank)
 
             #Performing crossover with the roulette ranked parents.
             print "Performing crossover and mutation..."
