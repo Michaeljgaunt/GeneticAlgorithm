@@ -86,6 +86,15 @@ Input an integer between 1 and 100 for the desired mutation rate.
 
 
 
+-s (interger)
+
+--slicepoints (integer)
+
+
+Input an integer for the desired number of slice points during crossover.
+
+
+
 -d
 
 --debug
