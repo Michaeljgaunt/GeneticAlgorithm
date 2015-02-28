@@ -199,6 +199,15 @@ def debug(args):
         chromosome_fitnesses = chromosome_evaluation.get("fitnesses")
         print "\n[Evaluating fitnesses] [n/a] (evaluate_fitness): "
         print str(chromosome_fitnesses)
+        
+        #Checking to see if a fitness threshold has been provided.
+        if(args.fitnessthreshold):
+            #Checking to see if any of the fitnesses of the generated chromosmoes have reached the threshold.
+                if(max(chromosome_fitnesses) >= args.fitnessthreshold):
+                    print "A chromosomes has exceeded the fitness threshold of " + str(args.fitnessthreshold) + ", mutation rate has been reduced to 1%"
+                    #If they have, the mutation rate is set to 1.
+                    args.mutrate = 1
+                    
         chromosome_fitness_sum = chromosome_evaluation.get("sum")
         print "\n[Evaluating sigma-fitness] [Check this value is roughly the sum of the above values] (evaluate_fitness): "
         print str(chromosome_fitness_sum)

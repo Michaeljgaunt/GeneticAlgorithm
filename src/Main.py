@@ -16,6 +16,7 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--cnum", help="Enter an even integer value for the desired number of chromosomes.",  default='4', type=int)
     parser.add_argument("-m", "--mutrate", help="Enter a value for the desired mutation rate (integer from 0 - 100).", default='5', type=int, choices=range(0, 101), metavar="")
     parser.add_argument("-s", "--slicepoints", help="Enter the number of slice points to use during crossover.", default='1', type=int)
+    parser.add_argument("-f", "--fitnessthreshold", help="Enter a value for the desired threshold fitness at which mutation rate will be reduced.", type=int)
     optfunc = parser.add_mutually_exclusive_group()
     optfunc.add_argument("-d", "--debug", help="Debug mode.", action='store_true')
     optfunc.add_argument("-p", "--plot", help="Plot a graph of the results.", action='store_true')
@@ -49,9 +50,13 @@ if __name__ == "__main__":
             print "The chromosomes will be ranked according to the tournament method (tournament size is set as " + str(args.tournamentrank) + ")."
         print str(args.slicepoints) + " slice point(s) will be used during crossover."
         print "Following each iteration, a mutation rate of " + str(args.mutrate) + "% will be applied."
+        if(args.fitnessthreshold):
+            print "This will be reduced to 1% if a threshold fitness value of " + str(args.fitnessthreshold) + " is found."
+        
         print "\nGenerating chromosomes...\n"
         #Randomly generating n chromosomes (n provided in command line arguments). Length of the chromosome is determined by the upper bound given in the command line arguments.
         chromosomes = GeneticAlgorithm.GA.generate_chromosomes(args.upperval, args.cnum)        
+        
         #If plot mode is engaged:
         if(args.plot):
             #Two arrays are instantiated to hold x-values and y-values.
@@ -59,7 +64,6 @@ if __name__ == "__main__":
             y_array = []
             global_y_array = []
         
-
         #Iterating the algorithm n times (n provided in command line arguments).
         for i in xrange(0, args.iterations):
 
@@ -70,6 +74,16 @@ if __name__ == "__main__":
             print "Evaluating chromosomes..."
             chromosome_evaluation = GeneticAlgorithm.GA.evaluate_fitness(chromosome_values)
             chromosome_fitnesses = chromosome_evaluation.get("fitnesses")
+            
+            #If a fitness threshold has been provided:
+            if(args.fitnessthreshold):
+                #Checking to see if any of the fitnesses of the generated chromosmoes have reached the threshold.
+                if(max(chromosome_fitnesses) >= args.fitnessthreshold):
+                    #If they have, the mutation rate is set to 1.
+                    print "A chromosomes has exceeded the fitness threshold of " + str(args.fitnessthreshold) + ", mutation rate has been reduced to 1%"
+                    args.fitnessthreshold = 'null'
+                    args.mutrate = 1
+                    
             chromosome_fitness_sum = chromosome_evaluation.get("sum")
 
             #Finding the index of the maximal fitness value and using it to find the variable value that caused the fitness value.

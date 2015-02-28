@@ -3,6 +3,7 @@ import math
 import numpy
 import random
 import matplotlib.pyplot as graph
+import matplotlib.patches as mpatches
 
 class GA:
     
@@ -237,8 +238,11 @@ class GA:
         graph.axis([min(xaxis), max(xaxis), (min(yaxis) * 0.95), (max(yaxis2) * 1.05)])
         graph.setp(line1, color="r")
         graph.setp(line2, color="b")
-        graph.title(title)
         graph.xlabel(xlabel)
         graph.ylabel(ylabel)
+        red_line = mpatches.Patch(color='red', label='Iterative fitness value')
+        blue_line = mpatches.Patch(color='blue', label='Best fitness value')
+        graph.legend(handles=[red_line, blue_line], bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+           ncol=2, mode="expand", borderaxespad=0.)
         graph.show()
     
